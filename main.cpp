@@ -3,26 +3,10 @@
 
 #define FRAMERATE 120
 
-#define SDL1
-
 #include "sdl1_chip8.h"
 
 int main(int argc, char *argv[]) {
   sdl1_chip8 c8;
-
-  // handle cmdline
-  char *rom = argv[1];
-  if (!rom) {
-    printf("USAGE: %s <rom>\n", (char *)argv[0]);
-    exit(-1);
-  }
-
-  // load ROM
-  printf("LOADING ROM (%s)\n", rom);
-  if (!c8.load(rom)) {
-    printf("ERROR: cant read ROM\n");
-    exit(-1);
-  }
 
   c8.init_screen();
 
@@ -40,8 +24,13 @@ int main(int argc, char *argv[]) {
     if ((framerate - framerate_old) > 1000 / FRAMERATE) {
       framerate_old = framerate;
       quit = c8.handle_input();
-      if (c8.loop()) {
-        c8.show_display();
+      if (c8.stage == c8.STAGE_MENU) {
+        // update menu
+        c8.show_menu();
+      } else {
+        if (c8.loop()) {
+          c8.show_display();
+        }
       }
     } else {
       // Wait remaining time

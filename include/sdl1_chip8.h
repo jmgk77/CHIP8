@@ -1,4 +1,7 @@
 #include <SDL/SDL.h>
+#include <SDL/SDL_ttf.h>
+#include <string>
+#include <vector>
 
 #include "chip8.h"
 
@@ -13,12 +16,30 @@ private:
   void check_keypress(SDL_Event *event);
   void check_keyrelease(SDL_Event *event);
 
+  struct MENU_ITEM {
+    std::string name;
+    SDL_Surface *item;
+    SDL_Surface *item2;
+  };
+
+  void choose_rom();
+  int menu_item;
+  std::vector<struct MENU_ITEM> files;
+
+  TTF_Font *font;
+
+  SDL_Surface *title;
+
 public:
-  bool loop();
   void show_display();
   void init_screen();
   void end_screen();
   bool handle_input();
   uint32_t get_ticks();
   void delay(uint16_t x);
+
+  enum { STAGE_MENU, STAGE_RUNNING };
+  int stage;
+  void scan_directory();
+  void show_menu();
 };
