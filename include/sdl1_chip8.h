@@ -30,6 +30,8 @@ private:
 
   SDL_Surface *title;
 
+  SDL_Joystick *joystick;
+
 public:
   void show_display();
   void init_screen();

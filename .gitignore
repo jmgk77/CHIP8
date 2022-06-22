@@ -9,3 +9,4 @@ TEST/
 *.ncurses
 *.sdl1
 *.sdl2
+*.ch8
