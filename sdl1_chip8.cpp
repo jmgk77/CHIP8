@@ -1,4 +1,5 @@
 #include "sdl1_chip8.h"
+#include <dirent.h>
 #include <vector>
 
 #include <SDL/SDL.h>
@@ -154,6 +155,7 @@ bool sdl1_chip8::handle_input() {
         if (event.key.keysym.sym == SDLK_RETURN) {
           // choose ROM
           stage = STAGE_RUNNING;
+          init();
           load((char *)files.at(menu_item).name.c_str());
         } else if (event.key.keysym.sym == SDLK_UP) {
           // move up
@@ -175,7 +177,7 @@ bool sdl1_chip8::handle_input() {
       break;
     case SDL_JOYBUTTONDOWN:
       // JOYSTICK BUTTON
-      if (event.jbutton.button == 6 /* BACK */) {
+      if (event.jbutton.button == BUTTON_BACK /* BACK */) {
         if (stage == STAGE_MENU) {
           // ESC on menu, exit
           quit = true;
@@ -184,15 +186,16 @@ bool sdl1_chip8::handle_input() {
           choose_rom();
         }
       } else if (stage == STAGE_MENU) {
-        if (event.jbutton.button == 0 /* X */) {
+        if (event.jbutton.button == BUTTON_A /* X */) {
           // choose ROM
           stage = STAGE_RUNNING;
+          init();
           load((char *)files.at(menu_item).name.c_str());
         }
       } else {
         //!!!ingame
       }
-      //!!!printf("%d\n", event.jbutton.button);
+      printf("%d\n", event.jbutton.button);
       break;
     case SDL_JOYHATMOTION:
       // JOYSTICK DPAD
@@ -224,14 +227,23 @@ void sdl1_chip8::delay(uint16_t x) { SDL_Delay(x); }
 void sdl1_chip8::scan_directory() {
   //
   MENU_ITEM entry;
-  for (int i = 0; i < 28; i++) {
-    char tmp[128];
-    //!!!read files
-    snprintf(tmp, sizeof(tmp), "test_%d.ch8", i);
-    entry.name = tmp;
-    entry.item = TTF_RenderText_Blended(font, tmp, {128, 128, 128});
-    entry.item2 = TTF_RenderText_Blended(font, tmp, {255, 128, 128});
-    files.push_back(entry);
+
+  // read usb files
+  struct dirent *en;
+  if (DIR *dr = opendir(".")) {
+    while ((en = readdir(dr)) != NULL) {
+      //      files.push_back(en->d_name);
+      if (en->d_name[0] == '.') {
+        continue;
+      }
+      char tmp[256];
+      snprintf(tmp, sizeof(tmp), "%s", en->d_name);
+      entry.name = tmp;
+      entry.item = TTF_RenderText_Blended(font, tmp, {128, 128, 128});
+      entry.item2 = TTF_RenderText_Blended(font, tmp, {255, 128, 128});
+      files.push_back(entry);
+    }
+    closedir(dr);
   }
 }
 

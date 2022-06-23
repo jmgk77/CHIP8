@@ -5,6 +5,18 @@
 
 #include "chip8.h"
 
+#define BUTTON_A 0
+#define BUTTON_B 1
+#define BUTTON_X 2
+#define BUTTON_Y 3
+#define BUTTON_L1 4
+#define BUTTON_R1 5
+#define BUTTON_BACK 6
+#define BUTTON_START 7
+#define BUTTON_MAIN 8
+#define BUTTON_L3 9
+#define BUTTON_R3 10
+
 class sdl1_chip8 : public chip8 {
 private:
   uint8_t sdl_keys[16] = {SDLK_x, SDLK_1, SDLK_2, SDLK_3, SDLK_q, SDLK_w,
