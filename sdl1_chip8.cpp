@@ -12,6 +12,7 @@
 #define HEIGHT 480
 #define MENU_ITENS_PER_PAGE 17
 #define ROM_DIRECTORY "."
+#define MENU_MAX_SIZE 30
 
 void sdl1_chip8::check_keypress(SDL_Event *event) {
   for (uint16_t i = 0; i < sizeof(sdl_keys); i++) {
@@ -103,6 +104,7 @@ void sdl1_chip8::init_screen() {
 
   // read directory
   scan_directory();
+  menu_item = 0;
   choose_rom();
 }
 
@@ -124,7 +126,6 @@ void sdl1_chip8::end_screen() {
 void sdl1_chip8::choose_rom() {
   // set variables
   stage = STAGE_MENU;
-  menu_item = 0;
   // clear screen
   SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
 }
@@ -153,22 +154,29 @@ bool sdl1_chip8::handle_input() {
           // ESC on game, goes to menu
           choose_rom();
         }
-      }
-      if (stage == STAGE_MENU) {
+      } else if (stage == STAGE_MENU) {
         // check keys
         if (event.key.keysym.sym == SDLK_RETURN) {
           // ENTER choose ROM
-          stage = STAGE_RUNNING;
           init();
-          load((char *)files.at(menu_item).name.c_str());
+          if (load((char *)files.at(menu_item).name.c_str())) {
+            stage = STAGE_RUNNING;
+          }
         } else if (event.key.keysym.sym == SDLK_UP) {
           // ARROW move up
           menu_item--;
         } else if (event.key.keysym.sym == SDLK_DOWN) {
           // ARROW move down
           menu_item++;
+        } else if (event.key.keysym.sym == SDLK_PAGEDOWN) {
+          // ARROW move up
+          menu_item += MENU_ITENS_PER_PAGE;
+        } else if (event.key.keysym.sym == SDLK_PAGEUP) {
+          // ARROW move down
+          menu_item -= MENU_ITENS_PER_PAGE;
         }
       } else {
+        // in game
         // chip8 keyboard handler
         check_keypress(&event);
       }
@@ -189,12 +197,18 @@ bool sdl1_chip8::handle_input() {
           // SELECT on game, menu
           choose_rom();
         }
-      } else if (stage == STAGE_MENU) {
+      }
+      if (stage == STAGE_MENU) {
         if (event.jbutton.button == BUTTON_A /* X */) {
           // X load ROM
-          stage = STAGE_RUNNING;
           init();
-          load((char *)files.at(menu_item).name.c_str());
+          if (load((char *)files.at(menu_item).name.c_str())) {
+            stage = STAGE_RUNNING;
+          }
+        } else if (event.jbutton.button == BUTTON_L1 /* L1 */) {
+          menu_item -= MENU_ITENS_PER_PAGE;
+        } else if (event.jbutton.button == BUTTON_R1 /* R1 */) {
+          menu_item += MENU_ITENS_PER_PAGE;
         }
       } else {
         //!!!ingame buttons
@@ -241,8 +255,11 @@ void sdl1_chip8::scan_directory() {
       if (en->d_name[0] == '.') {
         continue;
       }
-      char tmp[256];
-      snprintf(tmp, sizeof(tmp), "%s", en->d_name);
+      char tmp[MENU_MAX_SIZE + 1];
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wformat-truncation"
+      snprintf(tmp, MENU_MAX_SIZE, "%s", en->d_name);
+#pragma GCC diagnostic pop
       entry.name = tmp;
       entry.item = TTF_RenderText_Blended(font, tmp, {128, 128, 128});
       entry.item2 = TTF_RenderText_Blended(font, tmp, {255, 128, 128});

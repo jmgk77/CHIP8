@@ -1,3 +1,6 @@
+// CHIP8 emulator for linux/PS2/PS3
+// (c) JMGK 2022
+
 #include <stdio.h>
 #include <stdlib.h>
 
