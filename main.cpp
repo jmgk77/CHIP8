@@ -6,9 +6,30 @@
 
 #define FRAMERATE 120
 
+#include "defs.h"
 #include "sdl1_chip8.h"
 
 int main(int argc, char *argv[]) {
+#ifdef PS2
+  // #ifndef DEBUG
+  SifInitRpc(0);
+  while (!SifIopReset("", 0)) {
+  };
+  while (!SifIopSync()) {
+  };
+  // #endif
+
+  // Initialize SIF services
+  SifInitRpc(0);
+  SifLoadFileInit();
+  SifInitIopHeap();
+  sbv_patch_enable_lmb();
+  sbv_patch_fileio();
+
+  // change priority to make SDL audio thread run properly
+  ChangeThreadPriority(GetThreadId(), 72);
+#endif
+
   sdl1_chip8 c8;
 
   c8.init_screen();

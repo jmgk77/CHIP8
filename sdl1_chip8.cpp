@@ -5,14 +5,12 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 
+#include "defs.h"
 #include "font.cpp"
 #include "font2.cpp"
 
-#define WIDTH 640
-#define HEIGHT 480
-#define MENU_ITENS_PER_PAGE 17
-#define ROM_DIRECTORY "."
-#define MENU_MAX_SIZE 30
+#include <iostream>
+#include <ostream>
 
 void sdl1_chip8::check_keypress(SDL_Event *event) {
   for (uint16_t i = 0; i < sizeof(sdl_keys); i++) {
@@ -34,29 +32,37 @@ void sdl1_chip8::show_display() {
   // show display
   SDL_FillRect(screen, 0, SDL_MapRGB(screen->format, 0, 0, 0));
   SDL_Rect dstrect;
-  dstrect.h = 9;
-  dstrect.w = 9;
+  dstrect.w = (WIDTH / 64) - 1 /* 9 */;
+  dstrect.h = (HEIGHT / 32) - 1 /* 9 */;
   for (int yy = 0; yy < 32; yy++) {
     for (int xx = 0; xx < 64; xx++) {
       if (display[xx + (yy * 64)]) {
-        dstrect.x = xx * 10;
-        dstrect.y = yy * 10;
+        dstrect.x = xx * (WIDTH / 64) /* 10 */;
+        dstrect.y = yy * (HEIGHT / 32) /* 10 */;
         SDL_FillRect(screen, &dstrect, SDL_MapRGB(screen->format, 255, 128, 0));
       }
     }
   }
-  SDL_UpdateRect(screen, 0, 0, 0, 0);
+  // SDL_UpdateRect(screen, 0, 0, 0, 0);
+  SDL_Flip(screen);
 }
 
 void sdl1_chip8::init_screen() {
   // init SDL
-  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK) == -1) {
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER |
+               SDL_INIT_JOYSTICK /* SDL_INIT_VIDEO | SDL_INIT_JOYSTICK */) ==
+      -1) {
     printf("SDL_Init: %s\n", SDL_GetError());
     exit(-1);
   }
 
   // set a video mode
-  screen = SDL_SetVideoMode(WIDTH, HEIGHT, 0, 0);
+#ifdef PS2
+  screen = SDL_SetVideoMode(WIDTH, HEIGHT, 0,
+                            SDL_SWSURFACE | SDL_DOUBLEBUF | SDL_FULLSCREEN);
+#else
+  screen = SDL_SetVideoMode(WIDTH, HEIGHT, 0, SDL_SWSURFACE | SDL_DOUBLEBUF);
+#endif
   if (!screen) {
     printf("SDL_SetVideoMode: %s\n", SDL_GetError());
     exit(-2);
@@ -104,6 +110,7 @@ void sdl1_chip8::init_screen() {
 
   // read directory
   scan_directory();
+
   menu_item = 0;
   choose_rom();
 }
@@ -315,5 +322,6 @@ void sdl1_chip8::show_menu() {
     SDL_BlitSurface(next_arrow, NULL, screen, &dst);
   }
   // render
-  SDL_UpdateRect(screen, 0, 0, 0, 0);
+  // SDL_UpdateRect(screen, 0, 0, 0, 0);
+  SDL_Flip(screen);
 }

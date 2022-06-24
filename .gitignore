@@ -10,3 +10,5 @@ TEST/
 *.sdl1
 *.sdl2
 *.ch8
+*.txt
+*.elf
