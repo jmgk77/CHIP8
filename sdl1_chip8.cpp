@@ -43,7 +43,6 @@ void sdl1_chip8::show_display() {
       }
     }
   }
-  // SDL_UpdateRect(screen, 0, 0, 0, 0);
   SDL_Flip(screen);
 }
 
@@ -196,7 +195,7 @@ bool sdl1_chip8::handle_input() {
       break;
     case SDL_JOYBUTTONDOWN:
       // JOYSTICK BUTTON
-      if (event.jbutton.button == BUTTON_BACK /* BACK */) {
+      if (event.jbutton.button == BUTTON_BACK) {
         if (stage == STAGE_MENU) {
           // SELECT on menu, exit
           quit = true;
@@ -206,21 +205,36 @@ bool sdl1_chip8::handle_input() {
         }
       }
       if (stage == STAGE_MENU) {
-        if (event.jbutton.button == BUTTON_A /* X */) {
+        if (event.jbutton.button == BUTTON_A) {
           // X load ROM
           init();
           if (load((char *)files.at(menu_item).name.c_str())) {
             stage = STAGE_RUNNING;
           }
-        } else if (event.jbutton.button == BUTTON_L1 /* L1 */) {
+        } else if (event.jbutton.button == BUTTON_L1) {
           menu_item -= MENU_ITENS_PER_PAGE;
-        } else if (event.jbutton.button == BUTTON_R1 /* R1 */) {
+        } else if (event.jbutton.button == BUTTON_R1) {
           menu_item += MENU_ITENS_PER_PAGE;
         }
       } else {
         //!!!ingame buttons
       }
-      printf("%d\n", event.jbutton.button);
+#if 0
+      // DEBUG
+      printf("*BUTTON* %d (%s)\n", event.jbutton.button,
+             (event.jbutton.button == BUTTON_A)       ? "A"
+             : (event.jbutton.button == BUTTON_B)     ? "B"
+             : (event.jbutton.button == BUTTON_X)     ? "X"
+             : (event.jbutton.button == BUTTON_Y)     ? "Y"
+             : (event.jbutton.button == BUTTON_L1)    ? "L1"
+             : (event.jbutton.button == BUTTON_R1)    ? "R1"
+             : (event.jbutton.button == BUTTON_BACK)  ? "BACK"
+             : (event.jbutton.button == BUTTON_START) ? "START"
+             : (event.jbutton.button == BUTTON_SYS)   ? "SYS"
+             : (event.jbutton.button == BUTTON_L3)    ? "L3"
+             : (event.jbutton.button == BUTTON_R3)    ? "R3"
+                                                      : "UNKNOW");
+#endif
       break;
     case SDL_JOYHATMOTION:
       // JOYSTICK DPAD
@@ -236,6 +250,21 @@ bool sdl1_chip8::handle_input() {
       } else {
         //!!!ingame buttons
       }
+#if 0
+      // DEBUG
+      if (event.jhat.value & SDL_HAT_UP) {
+        printf("*SDL_HAT_UP*\n");
+      }
+      if (event.jhat.value & SDL_HAT_DOWN) {
+        printf("*SDL_HAT_DOWN*\n");
+      }
+      if (event.jhat.value & SDL_HAT_LEFT) {
+        printf("*SDL_HAT_LEFT*\n");
+      }
+      if (event.jhat.value & SDL_HAT_RIGHT) {
+        printf("*SDL_HAT_RIGHT*\n");
+      }
+#endif
       break;
     default:
       break;
@@ -322,6 +351,5 @@ void sdl1_chip8::show_menu() {
     SDL_BlitSurface(next_arrow, NULL, screen, &dst);
   }
   // render
-  // SDL_UpdateRect(screen, 0, 0, 0, 0);
   SDL_Flip(screen);
 }

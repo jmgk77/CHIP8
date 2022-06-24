@@ -44,3 +44,31 @@
 #define ROM_DIRECTORY "."
 #define MENU_MAX_SIZE 30
 #endif
+
+#ifdef PS2
+// buttons in PS2
+#define BUTTON_A 1
+#define BUTTON_B 2
+#define BUTTON_X 0
+#define BUTTON_Y 3
+#define BUTTON_L1 6
+#define BUTTON_R1 7
+#define BUTTON_BACK 4
+#define BUTTON_START 5
+#define BUTTON_SYS -1
+#define BUTTON_L3 10
+#define BUTTON_R3 11
+#else
+// buttons in linux
+#define BUTTON_A 0
+#define BUTTON_B 1
+#define BUTTON_X 2
+#define BUTTON_Y 3
+#define BUTTON_L1 4
+#define BUTTON_R1 5
+#define BUTTON_BACK 6
+#define BUTTON_START 7
+#define BUTTON_SYS 8
+#define BUTTON_L3 9
+#define BUTTON_R3 10
+#endif

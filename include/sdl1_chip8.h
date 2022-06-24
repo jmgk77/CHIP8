@@ -5,19 +5,6 @@
 
 #include "chip8.h"
 
-// buttons in linux
-#define BUTTON_A 0
-#define BUTTON_B 1
-#define BUTTON_X 2
-#define BUTTON_Y 3
-#define BUTTON_L1 4
-#define BUTTON_R1 5
-#define BUTTON_BACK 6
-#define BUTTON_START 7
-#define BUTTON_SYS 8
-#define BUTTON_L3 9
-#define BUTTON_R3 10
-
 class sdl1_chip8 : public chip8 {
 private:
   // keyboard
