@@ -12,6 +12,27 @@
 #include <iostream>
 #include <ostream>
 
+void sdl1_chip8::check_joystick(SDL_Event *event) {
+  if (event->type == SDL_JOYHATMOTION) {
+    for (uint16_t i = 0; i < sizeof(sdl_hats); i++) {
+      if (event->jhat.value & sdl_hats[i]) {
+        key_press(hat2chip8[i]);
+      } else {
+        key_release(hat2chip8[i]);
+      }
+    }
+  }
+  if (event->type == SDL_JOYBUTTONDOWN) {
+    for (uint16_t i = 0; i < sizeof(sdl_buttons); i++) {
+      if (event->jbutton.button == sdl_buttons[i]) {
+        key_press(buttons2chip8[i]);
+      } else {
+        key_release(buttons2chip8[i]);
+      }
+    }
+  }
+}
+
 void sdl1_chip8::check_keypress(SDL_Event *event) {
   for (uint16_t i = 0; i < sizeof(sdl_keys); i++) {
     if (event->key.keysym.sym == sdl_keys[i]) {
@@ -217,7 +238,8 @@ bool sdl1_chip8::handle_input() {
           menu_item += MENU_ITENS_PER_PAGE;
         }
       } else {
-        //!!!ingame buttons
+        // ingame buttons
+        check_joystick(&event);
       }
 #if 0
       // DEBUG
@@ -248,7 +270,8 @@ bool sdl1_chip8::handle_input() {
           menu_item++;
         }
       } else {
-        //!!!ingame buttons
+        // ingame buttons
+        check_joystick(&event);
       }
 #if 0
       // DEBUG

@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "chip8.h"
+#include "defs.h"
 
 class sdl1_chip8 : public chip8 {
 private:
@@ -11,8 +12,18 @@ private:
   uint8_t sdl_keys[16] = {SDLK_x, SDLK_1, SDLK_2, SDLK_3, SDLK_q, SDLK_w,
                           SDLK_e, SDLK_a, SDLK_s, SDLK_d, SDLK_z, SDLK_c,
                           SDLK_4, SDLK_r, SDLK_f, SDLK_v};
+  // joystick
+  uint8_t sdl_hats[8] = {SDL_HAT_LEFTUP, SDL_HAT_UP,       SDL_HAT_RIGHTUP,
+                         SDL_HAT_LEFT,   SDL_HAT_RIGHT,    SDL_HAT_LEFTDOWN,
+                         SDL_HAT_DOWN,   SDL_HAT_RIGHTDOWN};
+  uint8_t sdl_buttons[8] = {BUTTON_A,  BUTTON_B,  BUTTON_X,  BUTTON_Y,
+                            BUTTON_L1, BUTTON_R1, BUTTON_L3, BUTTON_R3};
+  uint8_t hat2chip8[8] = {1, 2, 3, 4, 6, 7, 8, 9};
+  uint8_t buttons2chip8[8] = {5, 0xB, 0xA, 0, 0xC, 0xD, 0xE, 0xF};
+
   void check_keypress(SDL_Event *event);
   void check_keyrelease(SDL_Event *event);
+  void check_joystick(SDL_Event *event);
 
   SDL_Surface *screen;
   SDL_Event event;
