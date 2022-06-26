@@ -4,6 +4,8 @@
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
+// #include <fileXio_rpc.h>
+// #include <fileio.h>
 #include <hdd-ioctl.h>
 #include <iopcontrol.h>
 #include <iopheap.h>
@@ -27,14 +29,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/time.h>
 #include <tamtypes.h>
+#include <time.h>
 #include <unistd.h>
 #include <usbhdfsd-common.h>
 
 #define WIDTH 640
-#define HEIGHT 480
+#define HEIGHT 448
 #define MENU_ITENS_PER_PAGE 17
-#define ROM_DIRECTORY "mass0:."
+#define ROM_DIRECTORY "mass:"
 #define MENU_MAX_SIZE 30
 #else
 // LINUX

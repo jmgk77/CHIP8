@@ -9,25 +9,47 @@
 #include "defs.h"
 #include "sdl1_chip8.h"
 
+#ifdef PS2
+#include "data/usbd.h"
+#include "data/usbhdfsd.h"
+#endif
+
 int main(int argc, char *argv[]) {
 #ifdef PS2
-  // #ifndef DEBUG
   SifInitRpc(0);
-  while (!SifIopReset("", 0)) {
-  };
-  while (!SifIopSync()) {
-  };
-  // #endif
 
-  // Initialize SIF services
+  while (!SifIopReset("", 0))
+    ;
+  while (!SifIopSync())
+    ;
+  ;
+  // fioExit();
+  SifExitIopHeap();
+  SifLoadFileExit();
+  SifExitRpc();
+  SifExitCmd();
+
   SifInitRpc(0);
+  FlushCache(0);
+  FlushCache(2);
+
   SifLoadFileInit();
   SifInitIopHeap();
-  sbv_patch_enable_lmb();
-  sbv_patch_fileio();
 
-  // change priority to make SDL audio thread run properly
-  ChangeThreadPriority(GetThreadId(), 72);
+  sbv_patch_enable_lmb();
+  sbv_patch_disable_prefix_check();
+
+  // load usb IRXs
+  int res = 0;
+  res = SifLoadModule("rom0:SIO2MAN", 0, NULL);
+  printf("SIO2MAN ret=%d\n", res);
+
+  // load usb IRXs
+  SifExecModuleBuffer((void *)usbd_array, usbd_array_length, 0, NULL, &res);
+  printf("usbd_array ret=%d\n", res);
+  SifExecModuleBuffer((void *)usbhdfsd_array, usbhdfsd_array_length, 0, NULL,
+                      &res);
+  printf("usbhdfsd_array ret=%d\n", res);
 #endif
 
   sdl1_chip8 c8;

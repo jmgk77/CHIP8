@@ -5,9 +5,9 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 
+#include "data/font.h"
+#include "data/font2.h"
 #include "defs.h"
-#include "font.cpp"
-#include "font2.cpp"
 
 #include <iostream>
 #include <ostream>
@@ -305,6 +305,7 @@ uint32_t sdl1_chip8::get_ticks() { return SDL_GetTicks(); }
 void sdl1_chip8::delay(uint16_t x) { SDL_Delay(x); }
 
 void sdl1_chip8::scan_directory() {
+  printf("sdl1_chip8::scan_directory()\n");
   MENU_ITEM entry;
   // read files
   struct dirent *en;
@@ -324,7 +325,10 @@ void sdl1_chip8::scan_directory() {
       entry.item2 = TTF_RenderText_Blended(font, tmp, {255, 128, 128});
       files.push_back(entry);
     }
+    printf("FILES READ (%D)\n", files.size());
     closedir(dr);
+  } else {
+    printf("CANT OPENDIR (%s)\n", ROM_DIRECTORY);
   }
 }
 
