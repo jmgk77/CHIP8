@@ -330,15 +330,17 @@ void sdl1_chip8::scan_directory() {
       if (en->d_name[0] == '.') {
         continue;
       }
-      char tmp[MENU_MAX_SIZE + 1];
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wformat-truncation"
+      char tmp[MENU_MAX_SIZE + 1];
       snprintf(tmp, MENU_MAX_SIZE, "%s", en->d_name);
-#pragma GCC diagnostic pop
-      entry.name = tmp;
       entry.item = TTF_RenderText_Blended(font, tmp, {128, 128, 128});
       entry.item2 = TTF_RenderText_Blended(font, tmp, {255, 128, 128});
+      char fname[256];
+      snprintf(fname, 256, "%s/%s", ROM_DIRECTORY, en->d_name);
+      entry.name = fname;
       files.push_back(entry);
+#pragma GCC diagnostic pop
     }
     printf("!!!FILES READ (%d)\n", (int)files.size());
     closedir(dr);
