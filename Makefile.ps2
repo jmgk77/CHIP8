@@ -5,7 +5,7 @@ EE_OBJS = $(EE_SRCS:.cpp=.o)
 
 EE_INCS     = -I$(PS2SDK)/ports/include -I./include -I$(PS2SDK)/ports/include/stlport
 EE_LDFLAGS  = -L$(PS2SDK)/ports/lib -L$(PS2DEV)/gsKit/lib
-EE_LIBS     = -lSDL_image -lsdl -lSDL_ttf -lstdc++ -lm -lpng -ljpeg -ltiff -lfreetype
+EE_LIBS     = -lSDL_image -lsdl -lSDL_ttf -lstdc++ -lm -lpng -ljpeg -ltiff -lfreetype -lmc
 
 EE_CXXFLAGS += -DPS2 -w -O3
 

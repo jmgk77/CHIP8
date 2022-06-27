@@ -305,12 +305,27 @@ uint32_t sdl1_chip8::get_ticks() { return SDL_GetTicks(); }
 void sdl1_chip8::delay(uint16_t x) { SDL_Delay(x); }
 
 void sdl1_chip8::scan_directory() {
-  printf("sdl1_chip8::scan_directory()\n");
+  printf("***SDL1_CHIP8::SCAN_DIRECTORY()\n");
+#ifdef PS2
+  // wait for PS2 USB drivers (retroarch)
+  struct stat buffer;
+  int ret = -1;
+  int retries = 50;
+  while (ret != 0 && retries > 0) {
+    ret = stat(ROM_DIRECTORY, &buffer);
+    /* Wait untill the device is ready */
+    nopdelay();
+    retries--;
+  }
+  printf("***USB init retries (%d)\n", retries);
+#endif
   MENU_ITEM entry;
   // read files
   struct dirent *en;
   if (DIR *dr = opendir(ROM_DIRECTORY)) {
+    printf("***OPENDIR OK (%s)\n", ROM_DIRECTORY);
     while ((en = readdir(dr)) != NULL) {
+      printf("***\t(%s)\n", en->d_name);
       // skip files that start with dot
       if (en->d_name[0] == '.') {
         continue;
@@ -325,10 +340,10 @@ void sdl1_chip8::scan_directory() {
       entry.item2 = TTF_RenderText_Blended(font, tmp, {255, 128, 128});
       files.push_back(entry);
     }
-    printf("FILES READ (%D)\n", files.size());
+    printf("***FILES READ (%d)\n", (int)files.size());
     closedir(dr);
   } else {
-    printf("CANT OPENDIR (%s)\n", ROM_DIRECTORY);
+    printf("***OPENDIR NOK (%s)\n", ROM_DIRECTORY);
   }
 }
 

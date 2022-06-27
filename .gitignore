@@ -12,3 +12,4 @@ TEST/
 *.ch8
 *.txt
 *.elf
+bin/
