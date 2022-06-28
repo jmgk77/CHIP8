@@ -9,8 +9,8 @@
 #include "data/font2.h"
 #include "defs.h"
 
-#include <iostream>
-#include <ostream>
+// #include <iostream>
+// #include <ostream>
 
 void sdl1_chip8::check_joystick(SDL_Event *event) {
   if (event->type == SDL_JOYHATMOTION) {

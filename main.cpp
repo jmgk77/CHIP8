@@ -25,11 +25,11 @@
 int main(int argc, char *argv[]) {
 #ifdef PS2
   // init PS2
-  /*   SifInitRpc(0);
-    while (!SifIopReset(NULL, 0)) {
-    };
-    while (!SifIopSync()) {
-    }; */
+  SifInitRpc(0);
+  while (!SifIopReset(NULL, 0)) {
+  };
+  while (!SifIopSync()) {
+  };
   SifInitRpc(0);
   sbv_patch_enable_lmb();
   sbv_patch_disable_prefix_check();

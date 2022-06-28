@@ -4,8 +4,6 @@
 #include <dirent.h>
 #include <errno.h>
 #include <fcntl.h>
-// #include <fileXio_rpc.h>
-// #include <fileio.h>
 #include <hdd-ioctl.h>
 #include <iopcontrol.h>
 #include <iopheap.h>
