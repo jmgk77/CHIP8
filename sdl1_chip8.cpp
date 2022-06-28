@@ -15,7 +15,7 @@
 void sdl1_chip8::check_joystick(SDL_Event *event) {
   if (event->type == SDL_JOYHATMOTION) {
     for (uint16_t i = 0; i < sizeof(sdl_hats); i++) {
-      if (event->jhat.value & sdl_hats[i]) {
+      if (event->jhat.value == sdl_hats[i]) {
         key_press(hat2chip8[i]);
       } else {
         key_release(hat2chip8[i]);
@@ -26,7 +26,12 @@ void sdl1_chip8::check_joystick(SDL_Event *event) {
     for (uint16_t i = 0; i < sizeof(sdl_buttons); i++) {
       if (event->jbutton.button == sdl_buttons[i]) {
         key_press(buttons2chip8[i]);
-      } else {
+      }
+    }
+  }
+  if (event->type == SDL_JOYBUTTONUP) {
+    for (uint16_t i = 0; i < sizeof(sdl_buttons); i++) {
+      if (event->jbutton.button == sdl_buttons[i]) {
         key_release(buttons2chip8[i]);
       }
     }
@@ -34,17 +39,18 @@ void sdl1_chip8::check_joystick(SDL_Event *event) {
 }
 
 void sdl1_chip8::check_keypress(SDL_Event *event) {
-  for (uint16_t i = 0; i < sizeof(sdl_keys); i++) {
-    if (event->key.keysym.sym == sdl_keys[i]) {
-      key_press(i);
+  if (event->type == SDL_KEYDOWN) {
+    for (uint16_t i = 0; i < sizeof(sdl_keys); i++) {
+      if (event->key.keysym.sym == sdl_keys[i]) {
+        key_press(i);
+      }
     }
   }
-}
-
-void sdl1_chip8::check_keyrelease(SDL_Event *event) {
-  for (uint16_t i = 0; i < sizeof(sdl_keys); i++) {
-    if (event->key.keysym.sym == sdl_keys[i]) {
-      key_release(i);
+  if (event->type == SDL_KEYUP) {
+    for (uint16_t i = 0; i < sizeof(sdl_keys); i++) {
+      if (event->key.keysym.sym == sdl_keys[i]) {
+        key_release(i);
+      }
     }
   }
 }
@@ -164,72 +170,48 @@ bool sdl1_chip8::handle_input() {
   while (SDL_PollEvent(&event)) {
     switch (event.type) {
     case SDL_QUIT:
-      // WINDOW CONTROL
       if (stage == STAGE_MENU) {
-        // CLOSE on menu, exit
         quit = true;
       } else {
-        // CLOSE on game, menu
         choose_rom();
       }
       break;
-    case SDL_KEYDOWN:
       // KEYBOARD
-      if (event.key.keysym.sym == SDLK_ESCAPE) {
-        if (stage == STAGE_MENU) {
-          // ESC on menu, exit
+    case SDL_KEYDOWN:
+    case SDL_KEYUP:
+      if (stage == STAGE_MENU) {
+        if (event.key.keysym.sym == SDLK_ESCAPE) {
           quit = true;
-        } else {
-          // ESC on game, goes to menu
-          choose_rom();
-        }
-      } else if (stage == STAGE_MENU) {
-        // check keys
-        if (event.key.keysym.sym == SDLK_RETURN) {
-          // ENTER choose ROM
+        } else if (event.key.keysym.sym == SDLK_RETURN) {
           init();
           if (load((char *)files.at(menu_item).name.c_str())) {
             stage = STAGE_RUNNING;
           }
         } else if (event.key.keysym.sym == SDLK_UP) {
-          // ARROW move up
           menu_item--;
         } else if (event.key.keysym.sym == SDLK_DOWN) {
-          // ARROW move down
           menu_item++;
         } else if (event.key.keysym.sym == SDLK_PAGEDOWN) {
-          // ARROW move up
           menu_item += MENU_ITENS_PER_PAGE;
         } else if (event.key.keysym.sym == SDLK_PAGEUP) {
-          // ARROW move down
           menu_item -= MENU_ITENS_PER_PAGE;
         }
       } else {
-        // in game
-        // chip8 keyboard handler
+        // STAGE_RUNNING
+        if (event.key.keysym.sym == SDLK_ESCAPE) {
+          choose_rom();
+        }
         check_keypress(&event);
       }
       break;
-    case SDL_KEYUP:
-      if (stage == STAGE_RUNNING) {
-        // chip8 keyboard handler
-        check_keyrelease(&event);
-      }
-      break;
-    case SDL_JOYBUTTONDOWN:
       // JOYSTICK BUTTON
-      if (event.jbutton.button == BUTTON_BACK) {
-        if (stage == STAGE_MENU) {
-          // SELECT on menu, exit
-          quit = true;
-        } else {
-          // SELECT on game, menu
-          choose_rom();
-        }
-      }
+    case SDL_JOYBUTTONDOWN:
+    case SDL_JOYBUTTONUP:
       if (stage == STAGE_MENU) {
+        /* if (event.jbutton.button == BUTTON_BACK) {
+          quit = true;
+        } else */
         if (event.jbutton.button == BUTTON_A) {
-          // X load ROM
           init();
           if (load((char *)files.at(menu_item).name.c_str())) {
             stage = STAGE_RUNNING;
@@ -240,56 +222,26 @@ bool sdl1_chip8::handle_input() {
           menu_item += MENU_ITENS_PER_PAGE;
         }
       } else {
-        // ingame buttons
+        // STAGE_RUNNING
+        if (event.jbutton.button == BUTTON_BACK) {
+          choose_rom();
+        }
         check_joystick(&event);
       }
-#if 0
-      // DEBUG
-      printf("*BUTTON* %d (%s)\n", event.jbutton.button,
-             (event.jbutton.button == BUTTON_A)       ? "A"
-             : (event.jbutton.button == BUTTON_B)     ? "B"
-             : (event.jbutton.button == BUTTON_X)     ? "X"
-             : (event.jbutton.button == BUTTON_Y)     ? "Y"
-             : (event.jbutton.button == BUTTON_L1)    ? "L1"
-             : (event.jbutton.button == BUTTON_R1)    ? "R1"
-             : (event.jbutton.button == BUTTON_BACK)  ? "BACK"
-             : (event.jbutton.button == BUTTON_START) ? "START"
-             : (event.jbutton.button == BUTTON_SYS)   ? "SYS"
-             : (event.jbutton.button == BUTTON_L3)    ? "L3"
-             : (event.jbutton.button == BUTTON_R3)    ? "R3"
-                                                      : "UNKNOW");
-#endif
       break;
-    case SDL_JOYHATMOTION:
       // JOYSTICK DPAD
+    case SDL_JOYHATMOTION:
       if (stage == STAGE_MENU) {
-        if (event.jhat.value & SDL_HAT_UP) {
-          // DPAD UP
+        if (event.jhat.value == SDL_HAT_UP) {
           menu_item--;
         }
-        if (event.jhat.value & SDL_HAT_DOWN) {
-          // DPAD DOWN
+        if (event.jhat.value == SDL_HAT_DOWN) {
           menu_item++;
         }
       } else {
-        // ingame buttons
+        // STAGE_RUNNING
         check_joystick(&event);
       }
-#if 0
-      // DEBUG
-      if (event.jhat.value & SDL_HAT_UP) {
-        printf("*SDL_HAT_UP*\n");
-      }
-      if (event.jhat.value & SDL_HAT_DOWN) {
-        printf("*SDL_HAT_DOWN*\n");
-      }
-      if (event.jhat.value & SDL_HAT_LEFT) {
-        printf("*SDL_HAT_LEFT*\n");
-      }
-      if (event.jhat.value & SDL_HAT_RIGHT) {
-        printf("*SDL_HAT_RIGHT*\n");
-      }
-#endif
       break;
     default:
       break;
