@@ -76,6 +76,8 @@ void sdl1_chip8::init_screen() {
     exit(-1);
   }
 
+  SDL_EnableKeyRepeat(SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL);
+
   // set a video mode
 #ifdef PS2
   screen = SDL_SetVideoMode(WIDTH, HEIGHT, 0,
