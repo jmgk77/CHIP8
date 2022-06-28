@@ -305,7 +305,6 @@ uint32_t sdl1_chip8::get_ticks() { return SDL_GetTicks(); }
 void sdl1_chip8::delay(uint16_t x) { SDL_Delay(x); }
 
 void sdl1_chip8::scan_directory() {
-  printf("!!!SDL1_CHIP8::SCAN_DIRECTORY()\n");
 #ifdef PS2
   // wait for PS2 USB drivers (retroarch)
   struct stat buffer;
@@ -317,15 +316,12 @@ void sdl1_chip8::scan_directory() {
     nopdelay();
     retries--;
   }
-  printf("!!!USB init retries (%d)\n", retries);
 #endif
   MENU_ITEM entry;
   // read files
   struct dirent *en;
   if (DIR *dr = opendir(ROM_DIRECTORY)) {
-    printf("!!!OPENDIR OK (%s)\n", ROM_DIRECTORY);
     while ((en = readdir(dr)) != NULL) {
-      printf("!!!\t(%s)\n", en->d_name);
       // skip files that start with dot
       if (en->d_name[0] == '.') {
         continue;
@@ -342,10 +338,14 @@ void sdl1_chip8::scan_directory() {
       files.push_back(entry);
 #pragma GCC diagnostic pop
     }
-    printf("!!!FILES READ (%d)\n", (int)files.size());
     closedir(dr);
-  } else {
-    printf("!!!OPENDIR NOK (%s)\n", ROM_DIRECTORY);
+  }
+  // no rom found?
+  if (!files.size()) {
+    entry.item = entry.item2 =
+        TTF_RenderText_Blended(font, "NO ROM FOUND", {255, 255, 128});
+    entry.name = "";
+    files.push_back(entry);
   }
 }
 
