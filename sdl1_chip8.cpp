@@ -266,7 +266,7 @@ void sdl1_chip8::scan_directory() {
   int retries = 50;
   while (ret != 0 && retries > 0) {
     ret = stat(ROM_DIRECTORY, &buffer);
-    /* Wait untill the device is ready */
+    // Wait untill the device is ready
     nopdelay();
     retries--;
   }

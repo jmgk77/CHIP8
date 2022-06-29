@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #define FRAMERATE 120
 
@@ -49,6 +50,10 @@ int main(int argc, char *argv[]) {
   SifExecModuleBuffer((void *)&bdmfs_vfat_irx, bdmfs_vfat_irx_length, 0, NULL,
                       &r);
   SifExecModuleBuffer((void *)usbhdfsd_irx, usbhdfsd_irx_length, 0, NULL, &r);
+#else
+  if (argc == 2) {
+    chdir(argv[1]);
+  }
 #endif
 
   sdl1_chip8 c8;
