@@ -61,7 +61,6 @@
 #define BUTTON_R1 7
 #define BUTTON_BACK 4
 #define BUTTON_START 5
-#define BUTTON_SYS -1
 #define BUTTON_L3 10
 #define BUTTON_R3 11
 #elif defined(PS3)
@@ -73,7 +72,6 @@
 #define BUTTON_R1 12
 #define BUTTON_BACK 7
 #define BUTTON_START 4
-#define BUTTON_SYS -1
 #define BUTTON_L3 6
 #define BUTTON_R3 5
 #define BUTTON_LEFT 0
