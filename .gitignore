@@ -13,3 +13,6 @@ TEST/
 *.txt
 *.elf
 bin/
+build/
+*.self
+*.pkg

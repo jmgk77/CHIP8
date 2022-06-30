@@ -44,7 +44,7 @@ LDFLAGS		=	$(MACHDEP) -Wl,-Map,$(notdir $@).map
 LIBS	:=	 -lSDL -lSDL_image -lSDL_mixer -lSDL_ttf -lpngdec -lpng -ljpeg -ljpgdec  -lvorbisfile -lvorbis -logg -laudio -lmikmod \
 			 -ltiff -lm -lfreetype -lz -lpixman-1 -lSDLmain -lrsx -lgcm_sys -lio -lsysutil -lrt -llv2 -lm  -lSDL_gfx -lSDL -lSDL_image \
 			 -lSDL_mixer -lSDL_ttf -lpngdec -lpng -ljpeg -ljpgdec  -lvorbisfile -lvorbis -logg -laudio -lmikmod -ltiff -lm -lfreetype \
-			 -lz -lpixman-1 -lSDLmain -lrsx -lgcm_sys -lio -lsysutil -lrt -llv2 -lm  -lSDL_gfx -ldbglogger -lnet -lhttputil -lsysmodule
+			 -lz -lpixman-1 -lSDLmain -lrsx -lgcm_sys -lio -lsysutil -lrt -llv2 -lm  -lSDL_gfx -lnet -lhttputil -lsysmodule
 
 
 #---------------------------------------------------------------------------------

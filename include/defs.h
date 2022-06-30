@@ -45,7 +45,7 @@
 #include <sys/process.h>
 #include <sysutil/msg.h>
 #include <sysutil/sysutil.h>
-#define ROM_DIRECTORY "/dev/usb0000"
+#define ROM_DIRECTORY "/dev_usb000"
 #else
 // LINUX
 #define ROM_DIRECTORY "."
