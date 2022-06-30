@@ -100,7 +100,7 @@ void sdl1_chip8::init_screen() {
   joystick = SDL_JoystickOpen(0);
   if (joystick == NULL) {
     printf("Couldn't open Joystick 0\n");
-    exit(-3);
+    // exit(-3);
   }
 
   // init ttf
