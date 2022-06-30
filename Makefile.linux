@@ -1,9 +1,9 @@
 EXE = chip8
 
-SOURCES = source/main.cpp source/chip8.cpp source/sdl1_chip8.cpp
+SOURCES = source/main.cpp source/chip8.cpp source/sdl1_chip8.cpp source/config.cpp
 OBJS = $(addsuffix .o, $(basename $(SOURCES)))
 
-CXXFLAGS = -I./include -g -Wall -Wformat -O3
+CXXFLAGS = -I./include -g -O3 -Wno-unused-result
 LIBS = `sdl-config --libs` -lSDL_ttf
 
 %.o:%.cpp

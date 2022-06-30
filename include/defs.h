@@ -63,6 +63,12 @@
 #define BUTTON_START 5
 #define BUTTON_L3 10
 #define BUTTON_R3 11
+#define BUTTON_L2 -1
+#define BUTTON_R2 -1
+#define BUTTON_LEFT -1
+#define BUTTON_DOWN -1
+#define BUTTON_RIGHT -1
+#define BUTTON_UP -1
 #elif defined(PS3)
 #define BUTTON_A 9
 #define BUTTON_B 10
@@ -93,4 +99,10 @@
 #define BUTTON_SYS 8
 #define BUTTON_L3 9
 #define BUTTON_R3 10
+#define BUTTON_L2 -1
+#define BUTTON_R2 -1
+#define BUTTON_LEFT -1
+#define BUTTON_DOWN -1
+#define BUTTON_RIGHT -1
+#define BUTTON_UP -1
 #endif

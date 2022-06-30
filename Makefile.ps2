@@ -1,6 +1,6 @@
 EE_BIN  = chip8_ps2.elf
 
-EE_SRCS = source/main.cpp source/chip8.cpp source/sdl1_chip8.cpp
+EE_SRCS = source/main.cpp source/chip8.cpp source/sdl1_chip8.cpp source/config.cpp
 EE_OBJS = $(EE_SRCS:.cpp=.o)
 
 EE_INCS     = -I$(PS2SDK)/ports/include -I./include -I$(PS2SDK)/ports/include/stlport

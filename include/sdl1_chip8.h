@@ -7,17 +7,14 @@
 #include "defs.h"
 
 class sdl1_chip8 : public chip8 {
-#ifdef PS3
 public:
-#else
-private:
-#endif
   // keyboard
   uint8_t sdl_keys[16] = {SDLK_x, SDLK_1, SDLK_2, SDLK_3, SDLK_q, SDLK_w,
                           SDLK_e, SDLK_a, SDLK_s, SDLK_d, SDLK_z, SDLK_c,
                           SDLK_4, SDLK_r, SDLK_f, SDLK_v};
   // joystick
 #ifndef PS3
+  // LINUX/PS2
   uint8_t sdl_buttons[8] = {BUTTON_A,  BUTTON_B,  BUTTON_X,  BUTTON_Y,
                             BUTTON_L1, BUTTON_R1, BUTTON_L3, BUTTON_R3};
   uint8_t buttons2chip8[8] = {5, 0xB, 0xA, 0, 0xC, 0xD, 0xE, 0xF};
