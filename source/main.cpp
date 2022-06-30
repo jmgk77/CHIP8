@@ -50,7 +50,19 @@ int main(int argc, char *argv[]) {
   SifExecModuleBuffer((void *)&bdmfs_vfat_irx, bdmfs_vfat_irx_length, 0, NULL,
                       &r);
   SifExecModuleBuffer((void *)usbhdfsd_irx, usbhdfsd_irx_length, 0, NULL, &r);
+#elif defined(PS3)
+  // XMB exit
+  sysUtilRegisterCallback(
+      SYSUTIL_EVENT_SLOT0,
+      [](uint64_t status, uint64_t param, void *userdata) {
+        if (status == SYSUTIL_EXIT_GAME) {
+          {return;};
+          sysProcessExit(1);
+        }
+      },
+      NULL);
 #else
+  // Linux
   if (argc == 2) {
     chdir(argv[1]);
   }

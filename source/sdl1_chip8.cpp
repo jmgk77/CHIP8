@@ -5,12 +5,9 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 
-#include "data/font.h"
-#include "data/font2.h"
+#include "font.h"
+#include "font2.h"
 #include "defs.h"
-
-// #include <iostream>
-// #include <ostream>
 
 void sdl1_chip8::check_joystick(SDL_Event *event) {
   if (event->type == SDL_JOYHATMOTION) {

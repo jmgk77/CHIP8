@@ -1,3 +1,8 @@
+#define WIDTH 640
+#define HEIGHT 480
+#define MENU_ITENS_PER_PAGE 17
+#define MENU_MAX_SIZE 30
+
 #ifdef PS2
 // PS2
 #include <debug.h>
@@ -32,19 +37,18 @@
 #include <time.h>
 #include <unistd.h>
 #include <usbhdfsd-common.h>
-
-#define WIDTH 640
-#define HEIGHT 448
-#define MENU_ITENS_PER_PAGE 17
 #define ROM_DIRECTORY "mass:"
-#define MENU_MAX_SIZE 30
+#elif defined(PS3)
+// PS3
+#include <io/pad.h>
+#include <ppu-types.h>
+#include <sys/process.h>
+#include <sysutil/msg.h>
+#include <sysutil/sysutil.h>
+#define ROM_DIRECTORY "/dev/usb0000"
 #else
 // LINUX
-#define WIDTH 640
-#define HEIGHT 480
-#define MENU_ITENS_PER_PAGE 17
 #define ROM_DIRECTORY "."
-#define MENU_MAX_SIZE 30
 #endif
 
 #ifdef PS2
