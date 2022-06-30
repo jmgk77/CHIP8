@@ -5,7 +5,7 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 
-#include "font.h"
+#include "font1.h"
 #include "font2.h"
 #include "defs.h"
 

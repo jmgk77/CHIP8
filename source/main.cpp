@@ -11,16 +11,16 @@
 #include "sdl1_chip8.h"
 
 #ifdef PS2
-#include "data/fileXio.h"
-#include "data/iomanX.h"
-#include "data/sio2man.h"
+#include "fileXio_irx.h"
+#include "iomanX.h"
+#include "sio2man.h"
 
-#include "data/bdm.h"
-#include "data/bdmfs_fatfs.h"
-#include "data/bdmfs_vfat.h"
-#include "data/usbd.h"
-#include "data/usbhdfsd.h"
-#include "data/usbmass_bd.h"
+#include "bdm.h"
+#include "bdmfs_fatfs.h"
+#include "bdmfs_vfat.h"
+#include "usbd.h"
+#include "usbhdfsd.h"
+#include "usbmass_bd.h"
 #endif
 
 int main(int argc, char *argv[]) {
