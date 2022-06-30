@@ -64,6 +64,24 @@
 #define BUTTON_SYS -1
 #define BUTTON_L3 10
 #define BUTTON_R3 11
+#elif defined(PS3)
+#define BUTTON_A 9
+#define BUTTON_B 10
+#define BUTTON_X 8
+#define BUTTON_Y 11
+#define BUTTON_L1 13
+#define BUTTON_R1 12
+#define BUTTON_BACK 7
+#define BUTTON_START 4
+#define BUTTON_SYS -1
+#define BUTTON_L3 6
+#define BUTTON_R3 5
+#define BUTTON_LEFT 0
+#define BUTTON_DOWN 1
+#define BUTTON_RIGHT 2
+#define BUTTON_UP 3
+#define BUTTON_L2 15
+#define BUTTON_R2 14
 #else
 // buttons in linux
 #define BUTTON_A 0

@@ -13,6 +13,7 @@ private:
                           SDLK_e, SDLK_a, SDLK_s, SDLK_d, SDLK_z, SDLK_c,
                           SDLK_4, SDLK_r, SDLK_f, SDLK_v};
   // joystick
+#ifndef PS3
   uint8_t sdl_buttons[8] = {BUTTON_A,  BUTTON_B,  BUTTON_X,  BUTTON_Y,
                             BUTTON_L1, BUTTON_R1, BUTTON_L3, BUTTON_R3};
   uint8_t buttons2chip8[8] = {5, 0xB, 0xA, 0, 0xC, 0xD, 0xE, 0xF};
@@ -20,6 +21,17 @@ private:
                          SDL_HAT_RIGHTDOWN, SDL_HAT_DOWN,    SDL_HAT_LEFTDOWN,
                          SDL_HAT_LEFT,      SDL_HAT_LEFTUP};
   uint8_t hat2chip8[8] = {2, 3, 6, 9, 8, 7, 4, 1};
+#else
+  // PS3 map dpad as buttons
+  uint8_t sdl_buttons[15] = {
+      BUTTON_A,     BUTTON_B,  BUTTON_X,  BUTTON_Y,    BUTTON_L1,
+      BUTTON_R1,    BUTTON_L3, BUTTON_R3, BUTTON_LEFT, BUTTON_DOWN,
+      BUTTON_RIGHT, BUTTON_UP, BUTTON_L2, BUTTON_R2,   BUTTON_START, /* NO F */
+  };
+  uint8_t buttons2chip8[15] = {
+      5, 0xB, 0xA, 0, 1, 3, 0xC, 0xD, 4, 8, 6, 2, 7, 9, 0xE, /* NO F */
+  };
+#endif
 
   void check_keypress(SDL_Event *event);
   void check_joystick(SDL_Event *event);

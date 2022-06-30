@@ -56,7 +56,6 @@ int main(int argc, char *argv[]) {
       SYSUTIL_EVENT_SLOT0,
       [](uint64_t status, uint64_t param, void *userdata) {
         if (status == SYSUTIL_EXIT_GAME) {
-          {return;};
           sysProcessExit(1);
         }
       },

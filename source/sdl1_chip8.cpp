@@ -5,11 +5,12 @@
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
 
+#include "defs.h"
 #include "font1.h"
 #include "font2.h"
-#include "defs.h"
 
 void sdl1_chip8::check_joystick(SDL_Event *event) {
+#ifndef PS3
   if (event->type == SDL_JOYHATMOTION) {
     for (uint16_t i = 0; i < sizeof(sdl_hats); i++) {
       if (event->jhat.value == sdl_hats[i]) {
@@ -19,6 +20,7 @@ void sdl1_chip8::check_joystick(SDL_Event *event) {
       }
     }
   }
+#endif
   if (event->type == SDL_JOYBUTTONDOWN) {
     for (uint16_t i = 0; i < sizeof(sdl_buttons); i++) {
       if (event->jbutton.button == sdl_buttons[i]) {
@@ -205,9 +207,6 @@ bool sdl1_chip8::handle_input() {
     case SDL_JOYBUTTONDOWN:
     case SDL_JOYBUTTONUP:
       if (stage == STAGE_MENU) {
-        /* if (event.jbutton.button == BUTTON_BACK) {
-          quit = true;
-        } else */
         if (event.jbutton.button == BUTTON_A) {
           init();
           if (load((char *)files.at(menu_item).name.c_str())) {
@@ -218,6 +217,13 @@ bool sdl1_chip8::handle_input() {
         } else if (event.jbutton.button == BUTTON_R1) {
           menu_item += MENU_ITENS_PER_PAGE;
         }
+#ifdef PS3
+        else if (event.jbutton.button == BUTTON_UP) {
+          menu_item--;
+        } else if (event.jbutton.button == BUTTON_DOWN) {
+          menu_item++;
+        }
+#endif
       } else {
         // STAGE_RUNNING
         if (event.jbutton.button == BUTTON_BACK) {
@@ -226,6 +232,7 @@ bool sdl1_chip8::handle_input() {
         check_joystick(&event);
       }
       break;
+#ifndef PS3
       // JOYSTICK DPAD
     case SDL_JOYHATMOTION:
       if (stage == STAGE_MENU) {
@@ -240,6 +247,7 @@ bool sdl1_chip8::handle_input() {
         check_joystick(&event);
       }
       break;
+#endif
     default:
       break;
     }
