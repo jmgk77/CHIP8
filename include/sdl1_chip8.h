@@ -7,7 +7,11 @@
 #include "defs.h"
 
 class sdl1_chip8 : public chip8 {
+#ifdef PS3
+public:
+#else
 private:
+#endif
   // keyboard
   uint8_t sdl_keys[16] = {SDLK_x, SDLK_1, SDLK_2, SDLK_3, SDLK_q, SDLK_w,
                           SDLK_e, SDLK_a, SDLK_s, SDLK_d, SDLK_z, SDLK_c,
@@ -32,7 +36,7 @@ private:
       5, 0xB, 0xA, 0, 1, 3, 0xC, 0xD, 4, 8, 6, 2, 7, 9, 0xE, /* NO F */
   };
 #endif
-
+private:
   void check_keypress(SDL_Event *event);
   void check_joystick(SDL_Event *event);
 

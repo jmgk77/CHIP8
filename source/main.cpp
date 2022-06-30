@@ -23,6 +23,12 @@
 #include "usbmass_bd.h"
 #endif
 
+#ifdef PS3
+extern void read_config();
+#endif
+
+sdl1_chip8 c8;
+
 int main(int argc, char *argv[]) {
 #ifdef PS2
   // init PS2
@@ -66,9 +72,9 @@ int main(int argc, char *argv[]) {
     chdir(argv[1]);
   }
 #endif
-
-  sdl1_chip8 c8;
-
+#ifdef PS3
+  read_config();
+#endif
   c8.init_screen();
 
   // fps cap
